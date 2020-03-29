@@ -5,11 +5,7 @@ const anotherList = json.filter(row => !(row.id % 2));
 const lists = [list, anotherList]
 const listContainer = document.getElementById('list-container')
 
-console.log(list)
-console.log(anotherList)
-console.log(lists)
-
-//add list
+//empty list to DOM
 const addList = _listId => {
   const list = document.createElement('div')
   list.id = _listId
@@ -17,41 +13,33 @@ const addList = _listId => {
   listContainer.appendChild(list)
 }
 
-//add image to list
-const addImage = (_i, _img, _list) => {
+//image
+const image = (_i, _img) => {
   const img = document.createElement('img')
   img.className = 'list-item'
   img.id = _i
   img.src = _img.url
-
-  img.onclick = function () {
-    //moveImage(...args)
-    renderImg(lists)
-  };
-  //PROBLEMAS
-  const currentList = document.getElementById('_list')
-  console.log(_list)
-  console.log(currentList)
-  currentList.appendChild(img)
+  img.onclick = () => moveImage(_i, list, anotherList)
+  return img
 }
 
-//move image cross list
-const moveImage = (...args) => {
-
+//move image
+const moveImage = (_imgId, _list1, _list2) => {
+  let match = false
+  //need loop through ID's of first array objects
+  //if _imgId is found in _list1 then match = true
+  match ? _list2.push((_list1.splice(_imgId, 1))[0]) : _list1.push((_list2.splice(_imgId, 1))[0])
 }
 
-//populate DOM
+//img to DOM
 const renderImg = data => {
-  data.forEach((list, j) => {
-    const listId = "list-"+j
+  data.forEach((list, listId) => {
     addList(listId)
-    list.forEach((img, i) => {
-      addImage(i, img, listId)
+    list.forEach((img, imgId) => {
+      //second list does not populate
+      document.getElementById(listId).appendChild(image(imgId, img))
     });
   });
-
 }
-
-
 
 renderImg(lists)
